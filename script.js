@@ -61,6 +61,96 @@ const uyLenis = (() => {
   matchMedia("(min-width: 1021px)").addEventListener("change", e => { if (e.matches) ustaw(false); });
 })();
 
+// Nagłówki: każde słowo w osobnej „masce”, żeby mogło wysunąć się spod linii (CSS: .maska, .maska__w).
+(() => {
+  if (!UY_RUCH) return;
+  document.querySelectorAll(".pojaw-tytul").forEach(h => {
+    let i = 0;
+    const podziel = wezel => {
+      for (const n of [...wezel.childNodes]) {
+        if (n.nodeType === 1) { podziel(n); continue; }
+        if (n.nodeType !== 3) continue;
+        const frag = document.createDocumentFragment();
+        for (const kawalek of n.textContent.split(/( +)/)) {
+          if (!kawalek) continue;
+          if (/^ +$/.test(kawalek)) { frag.append(kawalek); continue; }
+          const m = document.createElement("span"); m.className = "maska";
+          const w = document.createElement("span"); w.className = "maska__w"; w.style.setProperty("--i", i++); w.textContent = kawalek;
+          m.append(w); frag.append(m);
+        }
+        n.replaceWith(frag);
+      }
+    };
+    podziel(h);
+  });
+})();
+
+// Zdanie „Nie uczymy tylko języków…”: słowa ciemnieją po kolei w miarę przewijania.
+(() => {
+  const el = document.querySelector("[data-podswietl]");
+  if (!el || !UY_RUCH) return;
+  const slowa = el.textContent.trim().split(/ +/);
+  el.textContent = "";
+  const spany = slowa.map((s, i) => {
+    const sp = document.createElement("span"); sp.className = "slowo"; sp.textContent = s;
+    el.append(sp); if (i < slowa.length - 1) el.append(" ");
+    return sp;
+  });
+  let czeka = false;
+  const odswiez = () => {
+    czeka = false;
+    const r = el.getBoundingClientRect(), h = innerHeight;
+    const p = Math.min(1, Math.max(0, (h * 0.82 - r.top) / (r.height + h * 0.32)));
+    const n = p * spany.length;
+    spany.forEach((s, i) => { s.style.opacity = (0.16 + 0.84 * Math.min(1, Math.max(0, n - i))).toFixed(3); });
+  };
+  addEventListener("scroll", () => { if (!czeka) { czeka = true; requestAnimationFrame(odswiez); } }, { passive: true });
+  addEventListener("resize", odswiez);
+  odswiez();
+})();
+
+// Pas z powitaniami: dwa rzędy jadą w przeciwne strony, przyspieszają przy przewijaniu i zawracają przy przewijaniu w górę.
+(() => {
+  const rzedy = [...document.querySelectorAll(".pas-jezyki__rzad")];
+  if (!rzedy.length || !UY_RUCH) return;
+  const stan = rzedy.map(r => ({ tor: r.querySelector(".pas-jezyki__tor"), x: 0, kier: Number(r.dataset.kierunek) || -1 }));
+  const sekcja = document.querySelector(".pas-jezyki");
+  let ostT = 0, ostY = scrollY, zwrot = 1, widac = true;
+  if ("IntersectionObserver" in window) new IntersectionObserver(w => { widac = w[0].isIntersecting; }, { rootMargin: "100px 0px" }).observe(sekcja);
+  const krok = t => {
+    requestAnimationFrame(krok);
+    const dt = ostT ? t - ostT : 16; ostT = t;
+    if (dt <= 0 || !widac) { ostY = scrollY; return; }
+    const v = (scrollY - ostY) / Math.min(dt, 64); ostY = scrollY;
+    if (v > 0.05) zwrot = 1; else if (v < -0.05) zwrot = -1;
+    const szybkosc = 0.045 * (1 + Math.min(Math.abs(v) * 5, 9)) * zwrot; // px na ms
+    for (const s of stan) {
+      const pol = s.tor.scrollWidth / 2;
+      s.x += s.kier * szybkosc * Math.min(dt, 64);
+      if (s.x <= -pol) s.x += pol; else if (s.x > 0) s.x -= pol;
+      s.tor.style.transform = `translate3d(${s.x.toFixed(2)}px,0,0)`;
+    }
+  };
+  requestAnimationFrame(krok);
+})();
+
+// Paralaksa: element przesuwa się wolniej (albo szybciej) niż strona — data-paralaksa = współczynnik.
+(() => {
+  const el = [...document.querySelectorAll("[data-paralaksa]")];
+  if (!el.length || !UY_RUCH) return;
+  let czeka = false;
+  const ustaw = () => {
+    czeka = false;
+    for (const e of el) {
+      const r = e.getBoundingClientRect();
+      const y = (r.top + r.height / 2 - innerHeight / 2) * Number(e.dataset.paralaksa);
+      e.style.translate = `0 ${Math.max(-40, Math.min(40, y)).toFixed(1)}px`; // najwyżej ±40 px, żeby nie nachodził na cytat
+    }
+  };
+  addEventListener("scroll", () => { if (!czeka) { czeka = true; requestAnimationFrame(ustaw); } }, { passive: true });
+  ustaw();
+})();
+
 // Animacje przy przewijaniu: element dostaje klasę .widac, gdy pojawi się na ekranie
 // (klucz się obraca, zabytki „rysują się”, nagłówki i zdjęcia się odsłaniają).
 // Pozycję sprawdzamy przez getBoundingClientRect (IntersectionObserver nie widzi elementów schowanych maską clip-path).
@@ -88,9 +178,62 @@ const uyLenis = (() => {
   }
 })();
 
-// Formularz zapisu. W propozycji nic nie jest wysyłane: sprawdzamy pola i pokazujemy potwierdzenie.
-// Przy wdrożeniu podpiąć wysyłkę (np. skrypt PHP na serwerze albo usługę formularzy).
-document.querySelectorAll(".formularz").forEach(f => {
+// Zapisy krok po kroku: język → dla kogo → forma i miejsce → kontakt → podziękowanie.
+// W propozycji nic nie jest wysyłane (Dawid 9.11: „na razie bez wysyłki”). Przy wdrożeniu podpiąć wysyłkę w miejscu oznaczonym niżej.
+// Ceny orientacyjne z ich cennika: A = angielski, hiszpański, polski (korepetycje); B = niemiecki, polski dla obcokrajowców.
+const UY_CENY = {
+  A: { dziecko: [75, 45, "45 min"], mlodziez: [90, 55, "1 h"], dorosly: [100, 65, "1 h"] },
+  B: { dziecko: [80, 55, "45 min"], mlodziez: [95, 65, "1 h"], dorosly: [110, 75, "1 h"] },
+};
+document.querySelectorAll(".kroki-zapisu").forEach(f => {
+  const kroki = [...f.querySelectorAll(".krok")];
+  const pasek = [...f.querySelectorAll(".kroki-zapisu__pasek li")];
+  const wstecz = f.querySelector(".krok__wstecz");
+  const startowy = f.dataset.jezyk ? 2 : 1;
+  let akt = startowy;
+  const wybor = nazwa => {
+    const r = f.querySelector(`input[name="${nazwa}"]:checked`);
+    return r ? { w: r.value, t: r.closest(".opcja").querySelector("strong").textContent } : null;
+  };
+  const podsumowanie = () => {
+    const [j, k, fo, m] = ["jezyk", "kto", "forma", "miejsce"].map(wybor);
+    const lista = [j, k, fo, m].filter(Boolean).map(x => `<li>${x.t}</li>`).join("");
+    let cena = "";
+    if (k && k.w === "firma") cena = "Cena dla firm ustalana indywidualnie.";
+    else if (j && k && fo) {
+      const grupa = j.w === "niemiecki" || (j.w === "polski" && k.w === "dorosly") ? "B" : "A";
+      const [ind, gr, czas] = UY_CENY[grupa][k.w];
+      cena = `Orientacyjnie ${fo.w === "grupa" ? gr : ind} zł za lekcję (${czas}).`;
+    }
+    const html = `<ul>${lista}</ul>` + (cena ? `<p class="podsumowanie__cena">${cena}<a href="${f.dataset.cennik}">Cennik</a></p>` : "");
+    f.querySelectorAll(".krok__podsumowanie").forEach(p => { p.innerHTML = html; });
+  };
+  const pokaz = (n, przewin = true) => {
+    akt = n;
+    kroki.forEach(k => { k.hidden = Number(k.dataset.krok) !== n; k.classList.remove("wchodzi"); });
+    pasek.forEach((li, i) => { li.classList.toggle("zrobione", i + 1 < n); li.classList.toggle("teraz", i + 1 === n); });
+    wstecz.hidden = n === 1 || n === 5;
+    if (n >= 4) podsumowanie();
+    const aktywny = kroki.find(k => !k.hidden);
+    void aktywny.offsetWidth; aktywny.classList.add("wchodzi");
+    if (przewin) {
+      const top = f.getBoundingClientRect().top;
+      if (top < 0 || top > innerHeight * 0.6) (uyLenis ? uyLenis.scrollTo(f, { offset: -90 }) : f.scrollIntoView({ block: "start" }));
+    }
+  };
+  f.classList.add("kroki-zapisu--aktywne");
+  f.addEventListener("change", e => {
+    const k = Number(e.target.closest(".krok")?.dataset.krok);
+    if (k === 1 || k === 2) setTimeout(() => pokaz(k + 1), 240);
+    if (k === 3 && wybor("forma") && wybor("miejsce")) setTimeout(() => pokaz(4), 240);
+  });
+  wstecz.addEventListener("click", () => pokaz(Math.max(1, akt - 1)));
+  f.querySelector(".krok__od-nowa").addEventListener("click", () => {
+    f.reset();
+    if (f.dataset.jezyk) f.querySelector(`input[name="jezyk"][value="${f.dataset.jezyk}"]`).checked = true;
+    f.querySelector(".krok__imie").textContent = "";
+    pokaz(startowy);
+  });
   f.addEventListener("submit", e => {
     e.preventDefault();
     const blad = f.querySelector(".formularz__blad");
@@ -107,7 +250,9 @@ document.querySelectorAll(".formularz").forEach(f => {
       return;
     }
     blad.hidden = true;
-    f.classList.add("wyslany");
-    f.querySelector(".formularz__ok").hidden = false;
+    // TU przy wdrożeniu: wysłanie zgłoszenia (np. fetch do skryptu na serwerze szkoły).
+    f.querySelector(".krok__imie").textContent = ", " + imie.value.trim().split(" ")[0];
+    pokaz(5);
   });
+  pokaz(startowy, false);
 });

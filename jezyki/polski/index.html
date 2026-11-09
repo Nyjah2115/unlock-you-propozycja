@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../style.css?v=2026-11-09n">
+<link rel="stylesheet" href="../../style.css?v=2026-11-09q">
 </head>
 <body>
 
@@ -84,8 +84,8 @@
     <p>Dla uczniów szkół podstawowych i&nbsp;średnich: poprawne pisanie, mówienie i&nbsp;rozumienie tekstu.</p>
   </div>
   <dl class="rzedy">
-    <div><dt>Dzieci</dt><dd>Do 8. klasy szkoły podstawowej, także przygotowanie do egzaminu ósmoklasisty. Lekcja 45 minut.</dd></div>
-    <div><dt>Młodzież</dt><dd>Do klasy maturalnej, także przygotowanie do matury podstawowej i&nbsp;rozszerzonej. Lekcja 60 minut.</dd></div>
+    <div><dt>Dzieci</dt><dd>Do 8. klasy szkoły podstawowej, także przygotowanie do egzaminu ósmoklasisty. Lekcja 45&nbsp;minut.</dd></div>
+    <div><dt>Młodzież</dt><dd>Do klasy maturalnej, także przygotowanie do matury podstawowej i&nbsp;rozszerzonej. Lekcja 60&nbsp;minut.</dd></div>
   </dl>
   <div class="cennik">
     <h3 class="cennik__tytul">Cennik: korepetycje z&nbsp;polskiego</h3>
@@ -113,8 +113,8 @@
     <p>Dla osób, które uczą się polskiego jako języka obcego: od pierwszych rozmów po swobodne porozumiewanie się.</p>
   </div>
   <dl class="rzedy">
-      <div><dt>Dzieci i&nbsp;młodzież</dt><dd>Dla dzieci i&nbsp;nastolatków, które uczą się polskiego jako języka obcego. Lekcja 45 lub 60 minut.</dd></div>
-      <div><dt>Dorośli</dt><dd>Polski na co dzień i&nbsp;w&nbsp;pracy. Lekcja 60 minut.</dd></div>
+      <div><dt>Dzieci i&nbsp;młodzież</dt><dd>Dla dzieci i&nbsp;nastolatków, które uczą się polskiego jako języka obcego. Lekcja 45 lub 60&nbsp;minut.</dd></div>
+      <div><dt>Dorośli</dt><dd>Polski na co dzień i&nbsp;w&nbsp;pracy. Lekcja 60&nbsp;minut.</dd></div>
       <div><dt>Firmy</dt><dd>Zajęcia dla pracowników, indywidualne albo w&nbsp;grupach. Cenę ustalamy indywidualnie.</dd></div>
     </dl>
   <div class="cennik">
@@ -141,25 +141,65 @@
   <div class="zapisy__srodek pojaw-blok">
     <div class="zapisy__tekst">
       <h2 id="zapisy-tytul">Zapisz się na&nbsp;polski</h2>
-      <p>Wypełnij formularz, a&nbsp;w&nbsp;ciągu 24 godzin skontaktujemy się z&nbsp;Tobą i&nbsp;pomożemy wybrać odpowiedni kurs.</p>
+      <p>Wybierz język i&nbsp;formę zajęć, a&nbsp;potem zostaw kontakt. W&nbsp;ciągu 24&nbsp;godzin oddzwonimy i&nbsp;pomożemy wybrać odpowiedni kurs.</p>
       <p class="zapisy__tel">Wolisz porozmawiać?<br><a href="tel:+48605474488"><svg class="ikona" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.2l1.8 4.6-2.3 1.5a11 11 0 0 0 6.2 6.2l1.5-2.3L20 15.8V19a2 2 0 0 1-2.1 2A16 16 0 0 1 3 6.1 2 2 0 0 1 5 4z"/></svg>605&nbsp;474&nbsp;488</a></p>
     </div>
-    <form class="formularz" action="#" method="post" novalidate>
-      <input type="hidden" name="jezyk" value="polski">
-      <div class="formularz__pole"><label for="f-imie">Imię</label><input id="f-imie" name="imie" autocomplete="given-name" required></div>
-      <div class="formularz__pole"><label for="f-tel">Numer telefonu</label><input id="f-tel" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required></div>
-      <div class="formularz__pole formularz__pole--pelne"><label for="f-email">Adres e-mail</label><input id="f-email" name="email" type="email" autocomplete="email"></div>
-      <div class="formularz__pole formularz__pole--pelne"><label for="f-wiadomosc">Opowiedz nam o&nbsp;przyszłym kursancie</label><textarea id="f-wiadomosc" name="wiadomosc" rows="4" placeholder="Ile ma lat i jakiego języka chce się uczyć?"></textarea></div>
-      <p class="formularz__blad" role="alert" hidden></p>
-      <div class="formularz__wyslij">
-        <button class="przycisk" type="submit">Wyślij zgłoszenie</button>
-        <p class="formularz__zgoda">Wysyłając formularz, zgadzasz się na kontakt w&nbsp;sprawie zajęć.</p>
+    <form class="kroki-zapisu" action="#" method="post" novalidate data-jezyk="polski" data-cennik="../../cennik/">
+      <ol class="kroki-zapisu__pasek" aria-hidden="true"><li>Język</li><li>Dla kogo</li><li>Forma</li><li>Kontakt</li></ol>
+      <fieldset class="krok" data-krok="1">
+        <legend>Którego języka chcesz się uczyć?</legend>
+        <div class="opcje opcje--4">
+          <label class="opcja opcja--jezyk"><input type="radio" name="jezyk" value="angielski"><span><img src="../../img/rysunek-angielski.webp" alt="" width="445" height="720" loading="lazy"><strong>Angielski</strong></span></label>
+          <label class="opcja opcja--jezyk"><input type="radio" name="jezyk" value="niemiecki"><span><img src="../../img/rysunek-niemiecki.webp" alt="" width="884" height="720" loading="lazy"><strong>Niemiecki</strong></span></label>
+          <label class="opcja opcja--jezyk"><input type="radio" name="jezyk" value="hiszpanski"><span><img src="../../img/rysunek-hiszpanski.webp" alt="" width="573" height="720" loading="lazy"><strong>Hiszpański</strong></span></label>
+          <label class="opcja opcja--jezyk"><input type="radio" name="jezyk" value="polski" checked><span><img src="../../img/rysunek-polski.webp" alt="" width="311" height="720" loading="lazy"><strong>Polski</strong></span></label>
+        </div>
+      </fieldset>
+      <fieldset class="krok" data-krok="2">
+        <legend>Dla kogo są zajęcia?</legend>
+        <div class="opcje opcje--2">
+          <label class="opcja"><input type="radio" name="kto" value="dziecko"><span><strong>Dziecko</strong><small>do 8. klasy, ósmoklasista</small></span></label>
+          <label class="opcja"><input type="radio" name="kto" value="mlodziez"><span><strong>Młodzież</strong><small>do matury</small></span></label>
+          <label class="opcja"><input type="radio" name="kto" value="dorosly"><span><strong>Dorosły</strong><small>praca, wyjazd, rozmowa</small></span></label>
+          <label class="opcja"><input type="radio" name="kto" value="firma"><span><strong>Firma</strong><small>zajęcia dla pracowników</small></span></label>
+        </div>
+      </fieldset>
+      <fieldset class="krok" data-krok="3">
+        <legend>Jak chcesz się uczyć?</legend>
+        <div class="opcje opcje--2">
+          <label class="opcja"><input type="radio" name="forma" value="indywidualnie"><span><strong>Indywidualnie</strong><small>jeden na jeden z&nbsp;lektorem</small></span></label>
+          <label class="opcja"><input type="radio" name="forma" value="grupa"><span><strong>W&nbsp;grupie</strong><small>2–⁠4&nbsp;osoby na podobnym poziomie</small></span></label>
+        </div>
+        <p class="krok__pytanie">Gdzie?</p>
+        <div class="opcje opcje--3">
+          <label class="opcja opcja--mala"><input type="radio" name="miejsce" value="online"><span><strong>Online</strong></span></label>
+          <label class="opcja opcja--mala"><input type="radio" name="miejsce" value="stacjonarnie"><span><strong>W&nbsp;szkole</strong></span></label>
+          <label class="opcja opcja--mala"><input type="radio" name="miejsce" value="obojetnie"><span><strong>Obojętnie</strong></span></label>
+        </div>
+      </fieldset>
+      <fieldset class="krok" data-krok="4">
+        <legend>Zostaw kontakt, oddzwonimy w&nbsp;ciągu 24&nbsp;godzin</legend>
+        <div class="krok__podsumowanie" aria-live="polite"></div>
+        <div class="formularz">
+          <div class="formularz__pole"><label for="f-imie">Imię</label><input id="f-imie" name="imie" autocomplete="given-name" required></div>
+          <div class="formularz__pole"><label for="f-tel">Numer telefonu</label><input id="f-tel" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required></div>
+          <div class="formularz__pole formularz__pole--pelne"><label for="f-email">Adres e-mail <span>(opcjonalnie)</span></label><input id="f-email" name="email" type="email" autocomplete="email"></div>
+          <div class="formularz__pole formularz__pole--pelne"><label for="f-wiadomosc">Coś jeszcze? <span>(opcjonalnie)</span></label><textarea id="f-wiadomosc" name="wiadomosc" rows="3" placeholder="Np. wiek dziecka, poziom, pasujące dni i godziny"></textarea></div>
+          <p class="formularz__blad" role="alert" hidden></p>
+          <div class="formularz__wyslij">
+            <button class="przycisk" type="submit">Wyślij zgłoszenie</button>
+            <p class="formularz__zgoda">Wysyłając zgłoszenie, zgadzasz się na kontakt w&nbsp;sprawie zajęć.</p>
+          </div>
+        </div>
+      </fieldset>
+      <div class="krok krok--gotowe" data-krok="5" role="status" hidden>
+        <p class="krok__gotowe-tytul">Dziękujemy<span class="krok__imie"></span>!</p>
+        <p>Oddzwonimy w&nbsp;ciągu 24&nbsp;godzin i&nbsp;pomożemy wybrać grupę oraz termin.</p>
+        <div class="krok__podsumowanie"></div>
+        <p class="formularz__podglad">To podgląd nowej strony: w&nbsp;tej wersji zgłoszenie nie jest jeszcze wysyłane.</p>
+        <button type="button" class="link krok__od-nowa">Zapisz kolejną osobę</button>
       </div>
-      <div class="formularz__ok" role="status" hidden>
-        <p class="formularz__ok-tytul">Dziękujemy za zgłoszenie!</p>
-        <p>Skontaktujemy się z&nbsp;Tobą w&nbsp;ciągu 24 godzin i&nbsp;pomożemy wybrać odpowiedni kurs.</p>
-        <p class="formularz__podglad">To podgląd nowej strony: w&nbsp;tej wersji formularz jeszcze niczego nie wysyła.</p>
-      </div>
+      <button type="button" class="krok__wstecz" hidden>← Wstecz</button>
     </form>
   </div>
 </section>
@@ -211,6 +251,6 @@
   </div>
 </footer>
 <script src="../../vendor/lenis.min.js?v=1.1.18" defer></script>
-<script src="../../script.js?v=2026-11-09n" defer></script>
+<script src="../../script.js?v=2026-11-09q" defer></script>
 </body>
 </html>
