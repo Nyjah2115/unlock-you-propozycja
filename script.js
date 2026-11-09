@@ -109,29 +109,68 @@ const uyLenis = (() => {
   odswiez();
 })();
 
-// Pas z powitaniami: dwa rzędy jadą w przeciwne strony, przyspieszają przy przewijaniu i zawracają przy przewijaniu w górę.
+// Scena (jak w ODNOVA): zdjęcie przypięte na cały ekran i lekko dryfuje, hasło odsłania się litera po literze
+// w miarę przewijania (od 2% do 36% postępu sceny), a tekst odjeżdża w górę, ZANIM kremowa sekcja (łuk) dosięgnie jego dołu.
 (() => {
-  const rzedy = [...document.querySelectorAll(".pas-jezyki__rzad")];
-  if (!rzedy.length || !UY_RUCH) return;
-  const stan = rzedy.map(r => ({ tor: r.querySelector(".pas-jezyki__tor"), x: 0, kier: Number(r.dataset.kierunek) || -1 }));
-  const sekcja = document.querySelector(".pas-jezyki");
-  let ostT = 0, ostY = scrollY, zwrot = 1, widac = true;
-  if ("IntersectionObserver" in window) new IntersectionObserver(w => { widac = w[0].isIntersecting; }, { rootMargin: "100px 0px" }).observe(sekcja);
-  const krok = t => {
-    requestAnimationFrame(krok);
-    const dt = ostT ? t - ostT : 16; ostT = t;
-    if (dt <= 0 || !widac) { ostY = scrollY; return; }
-    const v = (scrollY - ostY) / Math.min(dt, 64); ostY = scrollY;
-    if (v > 0.05) zwrot = 1; else if (v < -0.05) zwrot = -1;
-    const szybkosc = 0.045 * (1 + Math.min(Math.abs(v) * 5, 9)) * zwrot; // px na ms
-    for (const s of stan) {
-      const pol = s.tor.scrollWidth / 2;
-      s.x += s.kier * szybkosc * Math.min(dt, 64);
-      if (s.x <= -pol) s.x += pol; else if (s.x > 0) s.x -= pol;
-      s.tor.style.transform = `translate3d(${s.x.toFixed(2)}px,0,0)`;
+  const sceny = [...document.querySelectorAll(".scena")].map(el => ({
+    el, img: el.querySelector(".scena__media img"), tekst: el.querySelector(".scena__tekst"),
+    next: el.nextElementSibling, litery: [], odslon: -1, dol: 0,
+  }));
+  if (!sceny.length) return;
+  for (const s of sceny) {
+    const h = s.el.querySelector(".scena__tytul");
+    if (!h || !UY_RUCH) continue;
+    const slowa = h.textContent.trim().split(/\s+/);
+    h.textContent = "";
+    slowa.forEach((slowo, i) => {
+      const w = document.createElement("span"); w.className = "w";
+      for (const znak of slowo) {
+        const l = document.createElement("span"); l.className = "l";
+        const it = document.createElement("i"); it.textContent = znak;
+        l.append(it); w.append(l);
+      }
+      h.append(w);
+      if (i < slowa.length - 1) h.append(" ");
+    });
+    h.setAttribute("aria-label", slowa.join(" "));
+    s.litery = [...h.querySelectorAll(".l > i")];
+  }
+  const zmierz = () => {
+    for (const s of sceny) {
+      const bylo = s.tekst.style.transform;
+      s.tekst.style.transform = "none";
+      const a = s.tekst.getBoundingClientRect(), z = s.tekst.lastElementChild.getBoundingClientRect();
+      s.dol = Math.round(z.bottom - a.top);
+      s.tekst.style.transform = bylo;
     }
   };
-  requestAnimationFrame(krok);
+  let czeka = false;
+  const tik = () => {
+    czeka = false;
+    const vh = innerHeight;
+    for (const s of sceny) {
+      const r = s.el.getBoundingClientRect();
+      if (r.bottom < -100 || r.top > vh + 100) continue;
+      const p = Math.min(1, Math.max(0, -r.top / Math.max(1, s.el.offsetHeight - vh)));
+      if (!UY_RUCH) continue;
+      s.img.style.setProperty("--py", ((p - 0.5) * -7).toFixed(2) + "%");
+      if (s.litery.length) {
+        const ile = Math.round(Math.min(1, Math.max(0, (p - 0.02) / 0.34)) * s.litery.length);
+        if (ile !== s.odslon) { s.litery.forEach((l, i) => l.classList.toggle("lit", i < ile)); s.odslon = ile; }
+      }
+      let wyjscie = 0;
+      if (s.next) {
+        const start = vh + 120, koniec = Math.min(s.dol + 60, vh - 40);
+        wyjscie = Math.min(1, Math.max(0, (start - s.next.getBoundingClientRect().top) / Math.max(1, start - koniec)));
+      }
+      s.tekst.style.opacity = (1 - wyjscie).toFixed(3);
+      s.tekst.style.transform = `translateY(${(-wyjscie * 70).toFixed(1)}px)`;
+    }
+  };
+  zmierz();
+  addEventListener("resize", () => { zmierz(); tik(); });
+  addEventListener("scroll", () => { if (!czeka) { czeka = true; requestAnimationFrame(tik); } }, { passive: true });
+  tik();
 })();
 
 // Paralaksa: element przesuwa się wolniej (albo szybciej) niż strona — data-paralaksa = współczynnik.

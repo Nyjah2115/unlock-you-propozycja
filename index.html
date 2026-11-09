@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2026-11-09q">
+<link rel="stylesheet" href="style.css?v=2026-11-09r">
 </head>
 <body>
 <div class="intro" aria-hidden="true">
@@ -107,14 +107,20 @@
   <div class="ornament" aria-hidden="true"><span></span><svg class="ornament__klucz" viewBox="0 0 64 24" aria-hidden="true"><circle cx="9" cy="12" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="12" r="2.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M15.2 12H58M48 12v6.5M53 12v5M58 12v7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span></span></div>
 </section>
 
-<!-- PAS Z POWITANIAMI w ich czterech językach: przesuwa się w bok i przyspiesza przy przewijaniu -->
-<section class="pas-jezyki" aria-label="Powitania i podziękowania w językach, których uczymy">
-  <div class="pas-jezyki__rzad" data-kierunek="-1"><div class="pas-jezyki__tor"><span class="pas-jezyki__kopia"><span lang="en">Hello</span><span class="pas-jezyki__znak">◆</span><span lang="de">Guten Tag</span><span class="pas-jezyki__znak">◆</span><span lang="es">¡Hola!</span><span class="pas-jezyki__znak">◆</span><span lang="pl">Dzień dobry</span><span class="pas-jezyki__znak">◆</span></span><span class="pas-jezyki__kopia" aria-hidden="true"><span lang="en">Hello</span><span class="pas-jezyki__znak">◆</span><span lang="de">Guten Tag</span><span class="pas-jezyki__znak">◆</span><span lang="es">¡Hola!</span><span class="pas-jezyki__znak">◆</span><span lang="pl">Dzień dobry</span><span class="pas-jezyki__znak">◆</span></span><span class="pas-jezyki__kopia" aria-hidden="true"><span lang="en">Hello</span><span class="pas-jezyki__znak">◆</span><span lang="de">Guten Tag</span><span class="pas-jezyki__znak">◆</span><span lang="es">¡Hola!</span><span class="pas-jezyki__znak">◆</span><span lang="pl">Dzień dobry</span><span class="pas-jezyki__znak">◆</span></span><span class="pas-jezyki__kopia" aria-hidden="true"><span lang="en">Hello</span><span class="pas-jezyki__znak">◆</span><span lang="de">Guten Tag</span><span class="pas-jezyki__znak">◆</span><span lang="es">¡Hola!</span><span class="pas-jezyki__znak">◆</span><span lang="pl">Dzień dobry</span><span class="pas-jezyki__znak">◆</span></span></div></div>
-  <div class="pas-jezyki__rzad pas-jezyki__rzad--2" data-kierunek="1"><div class="pas-jezyki__tor"><span class="pas-jezyki__kopia"><span lang="en">Thank you</span><span class="pas-jezyki__znak">◆</span><span lang="de">Danke schön</span><span class="pas-jezyki__znak">◆</span><span lang="es">¡Gracias!</span><span class="pas-jezyki__znak">◆</span><span lang="pl">Dziękuję</span><span class="pas-jezyki__znak">◆</span></span><span class="pas-jezyki__kopia" aria-hidden="true"><span lang="en">Thank you</span><span class="pas-jezyki__znak">◆</span><span lang="de">Danke schön</span><span class="pas-jezyki__znak">◆</span><span lang="es">¡Gracias!</span><span class="pas-jezyki__znak">◆</span><span lang="pl">Dziękuję</span><span class="pas-jezyki__znak">◆</span></span><span class="pas-jezyki__kopia" aria-hidden="true"><span lang="en">Thank you</span><span class="pas-jezyki__znak">◆</span><span lang="de">Danke schön</span><span class="pas-jezyki__znak">◆</span><span lang="es">¡Gracias!</span><span class="pas-jezyki__znak">◆</span><span lang="pl">Dziękuję</span><span class="pas-jezyki__znak">◆</span></span><span class="pas-jezyki__kopia" aria-hidden="true"><span lang="en">Thank you</span><span class="pas-jezyki__znak">◆</span><span lang="de">Danke schön</span><span class="pas-jezyki__znak">◆</span><span lang="es">¡Gracias!</span><span class="pas-jezyki__znak">◆</span><span lang="pl">Dziękuję</span><span class="pas-jezyki__znak">◆</span></span></div></div>
+<!-- SCENA (jak w ODNOVA): zdjęcie przypięte na cały ekran, hasło szkoły odsłania się litera po literze przy przewijaniu,
+     tekst odjeżdża w górę, a następna sekcja wjeżdża na zdjęcie łukiem -->
+<section class="scena" aria-labelledby="scena-tytul">
+  <div class="scena__media">
+    <img src="img/lekcja-biblioteka-2000.webp" srcset="img/lekcja-biblioteka-1000.webp 1000w, img/lekcja-biblioteka-2000.webp 2000w" sizes="100vw" alt="Lektorka czyta z chłopcem książkę w bibliotece" width="2000" height="1631" loading="lazy">
+  </div>
+  <div class="scena__tekst">
+    <h2 id="scena-tytul" class="scena__tytul">Odblokuj swój potencjał</h2>
+    <p class="scena__opis pojaw">Bo najlepsze efekty osiąga się wtedy, gdy za nauką stoją ludzie, którzy naprawdę się angażują.</p>
+  </div>
 </section>
 
 <!-- O SZKOLE: ich zdanie jako duży cytat podświetlany słowo po słowie, pod nim herb + tekst „Poznaj nas” -->
-<div class="pas pas--papier">
+<div class="pas pas--papier po-scenie">
 <section class="sekcja haslo" aria-label="Kim jesteśmy">
   <p class="haslo__tekst" data-podswietl>Nie uczymy tylko języków. Tworzymy miejsce, w&nbsp;którym każdy uczeń czuje się zauważony, wspierany i&nbsp;pewny swoich możliwości.</p>
 </section>
@@ -331,10 +337,10 @@
   </div>
   <div class="stopka__dol">
     <p>© 2015–⁠2026 Unlock You</p>
-    <p>Propozycja nowej strony. Zdjęcia poglądowe: Unsplash (@scamartist, @sofatutor, @shaker_jpg, @silverkblack, @gagliardiphotography, @nate_dumlao).</p>
+    <p>Propozycja nowej strony. Zdjęcia poglądowe: Unsplash (@awcreativeut, @scamartist, @sofatutor, @shaker_jpg, @silverkblack, @gagliardiphotography, @nate_dumlao).</p>
   </div>
 </footer>
 <script src="vendor/lenis.min.js?v=1.1.18" defer></script>
-<script src="script.js?v=2026-11-09q" defer></script>
+<script src="script.js?v=2026-11-09r" defer></script>
 </body>
 </html>

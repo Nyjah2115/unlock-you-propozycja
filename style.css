@@ -223,15 +223,22 @@ html.lenis, html.lenis body { height: auto; }
 .uwagi li { padding: 14px 0; border-bottom: 1px solid var(--linia); color: var(--tekst2); }
 .uwagi strong { font-weight: 600; color: var(--granat); }
 
-/* ---------- pas z powitaniami w czterech językach (przesuwany przy przewijaniu) ---------- */
-.pas-jezyki { overflow: hidden; margin-top: clamp(48px, 5vw, 80px); padding: clamp(28px, 3vw, 44px) 0; border-top: 1px solid var(--linia); border-bottom: 1px solid var(--linia); }
-.pas-jezyki__rzad { display: flex; white-space: nowrap; }
-.pas-jezyki__rzad + .pas-jezyki__rzad { margin-top: clamp(2px, .6vw, 10px); }
-.pas-jezyki__tor { display: flex; flex: none; will-change: transform; }
-.pas-jezyki__kopia { display: flex; flex: none; align-items: center; }
-.pas-jezyki__kopia span[lang] { padding: 0 .32em; font-family: var(--szeryf-duzy); font-size: clamp(44px, 7.2vw, 112px); line-height: 1.14; color: var(--granat); }
-.pas-jezyki__rzad--2 .pas-jezyki__kopia span[lang] { font-family: var(--szeryf); font-style: italic; font-size: clamp(36px, 5.6vw, 86px); color: var(--zloto); }
-.pas-jezyki__znak { font-size: clamp(12px, 1.4vw, 18px); color: var(--zloto); }
+/* ---------- scena (jak w ODNOVA): przypięte zdjęcie, hasło litera po literze, sekcja wjeżdża łukiem ---------- */
+.scena { position: relative; z-index: 0; height: 200vh; margin-top: clamp(56px, 6vw, 96px); margin-bottom: -58vh; background: var(--granat); }
+.scena__media { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.scena__media img { width: 100%; height: 116%; object-fit: cover; object-position: 50% 32%; transform: translateY(var(--py, 0%)); }
+.scena__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(2, 22, 38, .88) 0%, rgba(2, 22, 38, .6) 42%, rgba(2, 22, 38, .16) 76%); }
+.scena__tekst { position: sticky; top: 0; z-index: 1; display: flex; flex-direction: column; justify-content: center; gap: 24px; height: 100vh; max-width: var(--max); margin: -100vh auto 0; padding: 0 var(--pad); color: var(--bialy); }
+.scena__tytul { max-width: 10ch; font-family: var(--szeryf-duzy); font-weight: 400; font-size: clamp(54px, 8.4vw, 132px); line-height: .98; letter-spacing: -.015em; color: var(--bialy); }
+.scena__opis { max-width: 34ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.6; color: rgba(255, 255, 255, .86); }
+/* hasło dzielone na litery (script.js) — każda wysuwa się spod linii, gdy dojdzie do niej scroll */
+.scena__tytul .w { display: inline-block; white-space: nowrap; }
+.scena__tytul .l { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .14em; margin-bottom: -.14em; }
+.scena__tytul .l > i { display: inline-block; font-style: normal; transform: translateY(132%); transition: transform .55s cubic-bezier(.2, .7, .2, 1); }
+.scena__tytul .l > i.lit { transform: none; }
+/* sekcja po scenie: kremowa kopuła przez cały ekran, nachodzi na przypięte zdjęcie */
+.po-scenie { position: relative; z-index: 2; background: var(--tlo); border-radius: 50% 50% 0 0 / clamp(56px, 8vh, 104px) clamp(56px, 8vh, 104px) 0 0; box-shadow: 0 -30px 70px -30px rgba(2, 22, 38, .55); }
+.scena + .pas { margin-top: 0; }
 
 /* ---------- zdanie podświetlane słowo po słowie ---------- */
 .haslo__tekst { max-width: 24ch; margin: 0 auto; font-family: var(--szeryf-duzy); font-size: clamp(32px, 4.4vw, 64px); line-height: 1.16; letter-spacing: -.01em; text-align: center; color: var(--granat); }
@@ -286,7 +293,7 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---------- zapisy z formularzem (pola jak na ich obecnej stronie) ---------- */
 .zapisy { max-width: var(--max); margin: clamp(72px, 8vw, 120px) auto 0; padding: 0 var(--pad); scroll-margin-top: 16px; }
-.zapisy__srodek { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 80px); padding: clamp(32px, 5vw, 72px); border-radius: var(--r-duzy); background: var(--karta); }
+.zapisy__srodek { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 80px); padding: clamp(48px, 5vw, 72px) 0 0; border-top: 1px solid var(--linia); }
 .zapisy__tekst > p { margin-top: 14px; color: var(--tekst2); }
 .zapisy .zapisy__tel { margin-top: 28px; font-size: 15px; }
 .zapisy__tel a { display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; font-family: var(--szeryf); font-size: clamp(26px, 2.4vw, 32px); color: var(--granat); text-decoration: none; }
@@ -298,7 +305,7 @@ html.lenis, html.lenis body { height: auto; }
 .formularz label { font-size: 14px; font-weight: 600; color: var(--granat); }
 .formularz input, .formularz textarea {
   width: 100%; padding: 14px 16px; border: 1px solid var(--linia); border-radius: 12px;
-  background: var(--tlo); font: inherit; font-size: 16px; color: var(--tekst);
+  background: var(--karta); font: inherit; font-size: 16px; color: var(--tekst);
   transition: border-color .2s, box-shadow .2s;
 }
 .formularz textarea { min-height: 120px; resize: vertical; }
@@ -326,7 +333,7 @@ html.lenis, html.lenis body { height: auto; }
 .opcje--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .opcja { position: relative; display: block; cursor: pointer; }
 .opcja input { position: absolute; opacity: 0; pointer-events: none; }
-.opcja > span { display: flex; flex-direction: column; justify-content: center; gap: 3px; height: 100%; min-height: 66px; padding: 14px 18px; border: 1px solid var(--linia); border-radius: 16px; background: var(--tlo); transition: border-color .2s, background-color .25s, transform .2s; }
+.opcja > span { display: flex; flex-direction: column; justify-content: center; gap: 3px; height: 100%; min-height: 66px; padding: 14px 18px; border: 1px solid var(--linia); border-radius: 16px; background: var(--karta); transition: border-color .2s, background-color .25s, transform .2s; }
 .opcja strong { font-size: 16.5px; font-weight: 600; color: var(--granat); }
 .opcja small { font-size: 13.5px; line-height: 1.35; color: var(--tekst2); }
 .opcja:hover > span { border-color: var(--zloto); transform: translateY(-2px); }
@@ -342,7 +349,7 @@ html.lenis, html.lenis body { height: auto; }
 .krok__wstecz { margin-top: 18px; padding: 6px 0; font-size: 14.5px; font-weight: 600; color: var(--tekst2); }
 .krok__wstecz:hover { color: var(--bordo); }
 .krok__podsumowanie ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; }
-.krok__podsumowanie li { padding: 6px 14px; border-radius: 999px; background: var(--tlo); font-size: 14px; font-weight: 600; color: var(--granat); }
+.krok__podsumowanie li { padding: 6px 14px; border-radius: 999px; background: var(--karta); font-size: 14px; font-weight: 600; color: var(--granat); }
 .podsumowanie__cena { margin: 12px 0 22px; font-size: 14.5px; font-weight: 600; color: var(--bordo); }
 .podsumowanie__cena a { margin-left: 6px; color: var(--granat); text-decoration-color: var(--zloto); text-underline-offset: 3px; }
 .krok__gotowe-tytul { margin-bottom: 8px; font-family: var(--szeryf-duzy); font-size: clamp(30px, 3vw, 42px); line-height: 1.1; color: var(--granat); }
@@ -391,7 +398,7 @@ html.lenis, html.lenis body { height: auto; }
 .herb-sekcja img { width: clamp(110px, 12vw, 160px); flex: none; }
 .herb-sekcja p { margin: 10px 0 14px; color: var(--tekst2); }
 .kontakt { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: start; padding-top: clamp(48px, 6vw, 80px); }
-.kontakt .kontakt__formularz { padding: clamp(28px, 4vw, 48px); border-radius: var(--r-duzy); background: var(--karta); scroll-margin-top: 16px; }
+.kontakt .kontakt__formularz { scroll-margin-top: 16px; }
 .kontakt .kontakt__formularz h2 { margin-bottom: 22px; font-size: clamp(28px, 2.6vw, 36px); }
 .kontakt__social-tytul { margin-top: 30px; font-size: 12.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--tekst2); }
 .kontakt__social { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
@@ -505,7 +512,7 @@ html.lenis, html.lenis body { height: auto; }
   .rzedy dd { font-size: 16px; }
   .kroki li { padding-left: 52px; }
   .zapisy { margin-top: 64px; padding: 0 10px; }
-  .zapisy__srodek { padding: 28px 18px; border-radius: 18px; }
+  .zapisy__srodek { padding: 40px 6px 0; }
   .formularz { grid-template-columns: 1fr; }
   .opcje--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .opcja > span { padding: 12px 14px; }
@@ -519,9 +526,12 @@ html.lenis, html.lenis body { height: auto; }
   .jezyk-glowa__rysunek { height: 240px; }
   .jezyk-glowa .przyciski { flex-direction: column; align-items: stretch; }
   .herb-sekcja { flex-direction: column; text-align: center; }
-  .kontakt .kontakt__formularz { padding: 26px 18px; }
   .inne__jezyk img { height: 90px; }
   .hero .panorama { margin-top: 30px; }
+  .scena { height: 170vh; }
+  .scena__tekst { justify-content: flex-end; padding-bottom: clamp(110px, 20vh, 200px); }
+  .scena__media img { object-position: 46% 30%; }
+  .scena__media::after { background: linear-gradient(to top, rgba(2, 22, 38, .92) 0%, rgba(2, 22, 38, .55) 52%, rgba(2, 22, 38, .12) 100%); }
 }
 
 /* ---------- animacje: tylko z działającym JS (klasa .js) i gdy system nie ogranicza ruchu ---------- */
@@ -657,5 +667,6 @@ html.lenis, html.lenis body { height: auto; }
 
 @media (prefers-reduced-motion: reduce) {
   .intro { display: none !important; }
+  .scena__tytul .l > i { transform: none; }
   html { scroll-behavior: auto; }
 }
