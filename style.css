@@ -223,8 +223,12 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---------- strona główna: o szkole (herb) ---------- */
 .szkola { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
-.szkola__herb { display: grid; place-items: center; aspect-ratio: 1 / 1; border-radius: var(--r-duzy); background: var(--papier); }
-.szkola__herb img { width: 60%; }
+.szkola__herb { display: grid; place-items: center; }
+.szkola__herb img { width: min(100%, 400px); }
+/* pas z tłem na całą szerokość (Dawid 9.11: herb nie w kafelku, tylko w stronie, inny kolor tła) */
+.pas { margin-top: clamp(72px, 8vw, 120px); }
+.pas--papier { padding: clamp(64px, 7vw, 104px) 0; background: var(--papier); }
+.pas > .sekcja { padding-top: 0; }
 .szkola__tekst h2 { margin-bottom: 18px; }
 .szkola__tekst > p:not(.wstep) { margin-top: 14px; color: var(--tekst2); }
 .fakty { margin: 26px 0 26px; border-top: 1px solid var(--linia); }
@@ -396,8 +400,7 @@ html.lenis, html.lenis body { height: auto; }
   .grupy__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .grupa img { aspect-ratio: 3 / 2; }
   .szkola, .onas, .kontakt, .zapisy__srodek, .jezyk-glowa__siatka { grid-template-columns: 1fr; }
-  .szkola__herb { aspect-ratio: auto; padding: 40px 0; }
-  .szkola__herb img { width: 180px; }
+  .szkola__herb img { width: 220px; }
   .jezyk-glowa__rysunek { order: -1; height: 300px; }
 }
 
@@ -554,7 +557,6 @@ html.lenis, html.lenis body { height: auto; }
   .js:not(.anim-ok) :is(.pojaw, .pojaw-tytul, .pojaw-zdjecie, .pojaw-blok, .panorama__nazwa, .panorama__opis, .panorama__cena):not(.widac),
   .js:not(.anim-ok) .panorama__rysunek img { animation: uy-awaryjnie 0s linear 3s forwards; }
   @keyframes uy-awaryjnie { to { opacity: 1; transform: none; clip-path: none; -webkit-mask-position: 0 100%; mask-position: 0 100%; } }
-  .szkola__herb { --r: var(--r-duzy); }
   .forma .kadr { --r: 0px; }
   .zapisy__srodek { --r: var(--r-duzy); }
 
